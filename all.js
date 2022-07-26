@@ -7,6 +7,19 @@ let getData = JSON.parse(localStorage.getItem("list"))|| [];
 resultBtn.addEventListener('click', () => {
   let heightValue = newsHeight.value;
   let KgValue = newsKg.value;
+
+
+  if (heightValue == ''){
+    alert('請輸入身高');
+    return;
+  }else if (KgValue == ''){
+    alert('請輸入體重');
+    return;
+  }else if (cal == "NaN") {
+    alert('請輸入數字');
+    return;
+  }
+
   calBmi();
   let obj = {
     cal:cal,
@@ -17,7 +30,9 @@ resultBtn.addEventListener('click', () => {
   getData.push(obj);
   console.log(getData);
   localStorage.setItem("list",JSON.stringify(getData));
-  display()
+  display();
+  heightValue = '';
+  KgValue = '';
 });
 
 let cal;
@@ -26,7 +41,6 @@ function calBmi(){
   let Heightm = (newsHeight.value)* 0.01;
   cal = (newsKg.value / (Heightm * Heightm)).toFixed(1);
   console.log(cal); //bmi anser
-
   //運算bmi正常範圍
   if( cal < 18.5){
     bmi = '過輕';
