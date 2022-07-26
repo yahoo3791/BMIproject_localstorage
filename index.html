@@ -119,8 +119,20 @@ table {
   color: #424242;
   text-align: center;
 }
-.border-start{
-  border-left: 7px solid blue;
+.border-blue{
+  border-left: 7px solid #31BAF9;
+}
+.border-green{
+  border-left: 7px solid #86D73F;
+}
+.border-orange{
+  border-left: 7px solid #FF982D;
+}
+.border-deepOrange{
+  border-left: 7px solid #FF6C03;
+}
+.border-red{
+  border-left: 7px solid #FF1200;
 }
 .resultList{
   padding-bottom: 10px;
@@ -133,7 +145,7 @@ table {
   margin-bottom: 16px;
 }
 .wrap{
-  background: rgba(149, 165, 166,0.9) ;
+  background: rgba(149, 165, 166,0.9);
 }
 .result{
   transition: all .3s;
@@ -147,9 +159,85 @@ table {
 .result:active{
   background: #DEA821;
 }
+/*  */
+.green{
+  border: 5px solid #86D73F;
+  color: #86D73F;
+  background-color: #424242;
+  position: relative;
+}
+.blue{
+  border: 5px solid #31BAF9;
+  color: #31BAF9;
+  background-color: #424242;
+  position: relative;
+}
+.orange{
+  border: 5px solid #FF982D;
+  color: #FF982D;
+  background-color: #424242;
+  position: relative;
+}
+.deepOrange{
+  border: 5px solid #FF6C03;
+  color: #FF6C03;
+  background-color: #424242;
+  position: relative;
+}
+.red{
+  border: 5px solid #FF1200;
+  color: #FF1200;
+  background-color: #424242;
+  position: relative;
+}
+.reloadGreen{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #86D73F;
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+}
+.reloadBlue{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #31BAF9;
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+}
+.reloadOrange{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #FF982D;
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+}
+.reloadDeepOrange{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #FF6C03;
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+}
+.reloadRed{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #FF1200;
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+}
+/* 調整圈圈顏色樣式 */
 </style>
 <body>
-
   <div class="wrap">
     <div class="header flex-wrap d-flex align-center justify-content-around">
       <h1 class="logo">
@@ -161,7 +249,8 @@ table {
         <h2>體重kg</h2>
         <input type="text" maxlength="3" class="newsInput newsKg" placeholder="請輸入體重" style="height: 40px;">
       </div>
-      <button class="result">看結果</button>
+      <button class="result">看結果<span class="reload"></span><span></span></button>
+      <div class="resultInner"></div>
     </div>
     <ul class="resultList">
     </ul>
