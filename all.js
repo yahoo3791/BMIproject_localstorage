@@ -1,116 +1,103 @@
-const newsHeight = document.querySelector('.newsHeight') ;
+const newsHeight = document.querySelector('.newsHeight');
 const newsKg = document.querySelector('.newsKg');
-const resultBtn = document.querySelector('.result');
+const result = document.querySelector('.result');
+const getData = JSON.parse(localStorage.getItem('list')) || [];
 const resultList = document.querySelector('.resultList');
-const reload = document.querySelector('.reload');
-const resultInner = document.querySelector('.resultInner');
-let getData = JSON.parse(localStorage.getItem("list"))|| [];
+const clearBtn = document.querySelector('.clearBtn');
 
-resultBtn.addEventListener('click', () => {
-  let heightValue = newsHeight.value;
+clearBtn.addEventListener('click', () => {
+  localStorage.clear();
+  location.reload();
+})
+
+
+
+
+result.addEventListener('click',function(){
+  let HeightValue = newsHeight.value;
   let KgValue = newsKg.value;
-
-
-  if (heightValue == ''){
-    alert('請輸入身高');
+  if (HeightValue == '' || KgValue == '' || HeightValue == null || KgValue == null || HeightValue == undefined || KgValue == undefined){
+    alert('error');
     return;
-  }else if(KgValue == ''){
-    alert('請輸入體重');
-    return;
-  };
-
-  calBmi();
-  let obj = {
-    cal:cal,
-    bmi:bmi,
-    cm : heightValue,
-    kg : KgValue
   }
-  getData.push(obj);
-  console.log(getData);
-  localStorage.setItem("list",JSON.stringify(getData));
-  display();
-  checkColor();
+  let bmi = calculate(KgValue, HeightValue).toFixed(2);
+  let BmiResult;
+  let date = new Date;
+  let month = ('0' + (date.getMonth() + 1)).slice(-2);
+  let day = date.getDate();
+  let year = date.getFullYear();
+  let today = month + '-' + day + '-' + year;
+  let BmiColor;
 
-  heightValue = '';
-  KgValue = '';
+  if (bmi < 18.5) {
+    BmiResult = '過輕';
+    BmiColor = '31BAF9';
+  } else if (bmi >= 18.5 && bmi < 24) {
+    BmiResult = '理想';
+    BmiColor = '86D73F';
+  } else if (bmi >= 24 && bmi < 27) {
+    BmiResult = '過重';
+    BmiColor = 'FF982D';
+  } else if (bmi >= 27 && bmi < 30) {
+    BmiResult = '輕度肥胖';
+    BmiColor = 'FF6C03';
+  } else if (bmi >= 30 && bmi < 35) {
+    BmiResult = '中度肥胖';
+    BmiColor = 'FF6C03';
+  } else if (bmi >= 35) {
+    BmiResult = '重度肥胖';
+    BmiColor = 'FF1200';
+  }
+
+  let obj ={};
+  obj.result = `${BmiResult}`;
+  obj.bmi = bmi;
+  obj.kg = KgValue;
+  obj.height = HeightValue;
+  obj.date = today;
+  obj.color = BmiColor;
+  getData.push(obj);
+  localStorage.setItem('list',JSON.stringify(getData));
+
+  HeightValue ='';
+  kgVaule ='';
+  render();
 });
 
-let cal;
-let bmi;
-function calBmi(){
-  let Heightm = (newsHeight.value)* 0.01;
-  cal = (newsKg.value / (Heightm * Heightm)).toFixed(1);
-  console.log(cal); //bmi anser
-  //運算bmi正常範圍
-  if( cal < 18.5){
-    bmi = '過輕';
-  }else if(cal >= 18.5 && cal < 24){
-    bmi = '理想';
-  }else if(cal >= 24 && cal < 27){
-    bmi = '過重';
-  }else if(cal >= 27 && cal < 30){
-    bmi = '輕度肥胖';
-  }else if(cal >= 30 && cal < 35){
-    bmi = '中度肥胖';
-  }else(bmi = '重度肥胖');
+
+function calculate(a, b){
+  let Mathpow = Math.pow(b*0.01,2);
+  let bmi = a / Mathpow;
+  return bmi;
 }
 
-function display(){
-  let today = new Date();
-  let getMonth = ("0" + (today.getMonth() + 1)).slice(-2);
-  let getDate = today.getDate();
-  let getFullYear = today.getFullYear();
-  let str = '<h3 class="resultTitle">BMI紀錄</h3>';
+function render(){
+  let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
   let len = getData.length;
-  for(let i = 0; i<len; i++){
-    str += `<li class="resultItem d-flex justify-content-around">
-        <p>${getData[i].bmi}</p>
-        <p><span>BMI </span>${getData[i].cal}</p>
-        <p><span>weight </span>${getData[i].kg}</p>
-        <p><span>height </span>${getData[i].cm}</p>
-        <p><span>date </span>${getMonth+'-'+getDate+'-'+getFullYear}</p>
-      </li>`;
+  let str = `<h2 class="resultTitle">BMI紀錄</h2>`;
+  for(let i=0; i<len; i++){
+    btn = `<p style="border-radius:50%; text-align: center; line-height: 110px; border:5px solid #${getData[i].color}; color:#${getData[i].color}">BMI${getData[i].bmi}</p>
+  <span class="reload position-absolute" style="background-color:#${getData[i].color}"><img style="" src="https://upload.cc/i1/2022/05/08/9FJVha.png" alt=""></span>
+  <span class="position-absolute" style="bottom: -30px; left:20px ;color:#${getData[i].color}">${getData[i].result}</span>
+  `;
+    str += `<li class="resultItem" style="border-left:7px solid #${getData[i].color}"><p>${getData[i].result}</p><p><span>BMI</span>${getData[i].bmi}</p><p><span>weight</span>${getData[i].kg}kg</p><p><span>height</span>${getData[i].height}cm</p><p>${getData[i].date}</p></li>`
   }
-resultList.innerHTML = str;
-  }
-
-display();
-
-function checkColor(){
-  let len = getData.length;
-  for (let i = 0; i < len; i++) {
-    if (getData[i].bmi == '過輕') {
-      resultList.children[i+1].classList.add("border-blue");
-      resultBtn.classList.add('blue');
-      reload.classList.add('reloadBlue');
-      resultInner.innerText = '過輕';
-    } else if(getData[i].bmi == '理想'){
-      resultList.children[i+1].classList.add("border-green");
-      resultBtn.classList.add('green');
-      reload.classList.add('reloadGreen');
-      resultInner.innerText = '理想';
-    } else if (getData[i].bmi == '過重'){
-      resultList.children[i+1].classList.add("border-orange");
-      resultBtn.classList.add('Orange');
-      reload.classList.add('reloadOrange');
-      resultInner.innerText = '過重';
-    } else if (getData[i].bmi == '輕度肥胖') {
-      resultList.children[i+1].classList.add("border-deepOrange");
-      resultBtn.classList.add('deepOrange');
-      reload.classList.add('reloadDeepOrange');
-      resultInner.innerText = '輕度肥胖';
-    } else if (getData[i].bmi == '中度肥胖') {
-      resultList.children[i + 1].classList.add("border-deepOrange");
-      resultBtn.classList.add('deepOrange');
-      reload.classList.add('reloadDeepOrange');
-      resultInner.innerText = '中度肥胖';
-    } else if (getData[i].bmi == '重度肥胖') {
-      resultList.children[i+1].classList.add("border-red");
-      resultBtn.classList.add('red');
-      reload.classList.add('reloadRed');
-      resultInner.innerText = '重度肥胖';
-    } 
+  resultList.innerHTML = str;
+  result.innerHTML = btn;
+// 
+  const reload = document.querySelector('.reload');
+  if( reload == null ){
+    return;
+  }else{
+    reload.addEventListener('click', function (e) {
+      console.log(e.target);
+      if (e.target.nodeName == "SPAN" || e.target.nodeName == "IMG") {
+        result.innerHTML = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
+      } else {
+        return;
+      }
+    })
+// 
   }
 }
-checkColor();
+render();
