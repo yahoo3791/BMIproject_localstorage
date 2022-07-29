@@ -16,11 +16,12 @@ clearBtn.addEventListener('click', () => {
 result.addEventListener('click',function(){
   let HeightValue = newsHeight.value;
   let KgValue = newsKg.value;
-  if (HeightValue == '' || KgValue == '' || HeightValue == null || KgValue == null || HeightValue == undefined || KgValue == undefined){
+  if (HeightValue == '' || KgValue == '' || HeightValue == null || KgValue == null || HeightValue == undefined || KgValue == undefined ){
     alert('error');
     return;
   }
   let bmi = calculate(KgValue, HeightValue).toFixed(2);
+  if(isNaN(bmi)){return};
   let BmiResult;
   let date = new Date;
   let month = ('0' + (date.getMonth() + 1)).slice(-2);
