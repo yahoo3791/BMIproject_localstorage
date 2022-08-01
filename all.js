@@ -1,7 +1,7 @@
 const newsHeight = document.querySelector('.newsHeight');
 const newsKg = document.querySelector('.newsKg');
 const result = document.querySelector('.result');
-const getData = JSON.parse(localStorage.getItem('list')) || [];
+let getData = JSON.parse(localStorage.getItem('list')) || [];
 const resultList = document.querySelector('.resultList');
 const clearBtn = document.querySelector('.clearBtn');
 const waitCm = document.querySelector('.WaitCm');
@@ -9,21 +9,29 @@ const waitKg = document.querySelector('.WaitKg');
 const resultP = document.querySelector('.resultP');
 
 clearBtn.addEventListener('click', () => {
-  localStorage.clear();
-  resultP.innerHTML = "這裡還沒有資料，快來計算你的 BMI 吧！";
-  newsHeight.value = '';
-  newsKg.value ='';
+  // localStorage.clear();
+  localStorage.removeItem('list');
+  init();
 })
-
 function init(){
-
+  resultList.innerHTML = `
+  <h2 class="resultTitle">BMI紀錄</h2>
+  <li>這裡還沒有資料，快來計算你的 BMI 吧！</li>`;
+  newsHeight.value = '';
+  newsKg.value = '';
+  let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
+  result.innerHTML = btn;
+  if (JSON.parse(localStorage.getItem('list')) == null ){
+    localStorage.setItem('list', JSON.stringify([]));
+    let arr1 = [];
+    getData = arr1;
+    // 設定回空陣列 localStorage清空但陣列沒空 導致重新輸入新值會有清空值出現
+    console.log(getData);
+  }
 }
-
-
 result.addEventListener('click',function(){
   let heightValue = parseInt(newsHeight.value);
   let kgValue = parseInt(newsKg.value);
-  // heightValue == '' || kgValue == '' || heightValue == null || kgValue == null || heightValue == undefined || kgValue == undefined 
   if ( heightValue <= 0 || kgValue <= 0 ){
     alert('error');
     return;
@@ -58,7 +66,7 @@ result.addEventListener('click',function(){
     bmiColor = 'FF1200';
   }
 
-  let obj ={};
+  let obj = {};
   obj.result = `${bmiResult}`;
   obj.bmi = bmi;
   obj.kg = kgValue;
@@ -67,10 +75,9 @@ result.addEventListener('click',function(){
   obj.color = bmiColor;
   getData.push(obj);
   localStorage.setItem('list',JSON.stringify(getData));
-
   newsHeight.value = '';
   newsKg.value = '';
-  render();
+  render(getData);
   reset();
 });
 
@@ -82,7 +89,7 @@ function calculate(a, b){
 }
 
 
-function render(e){
+function render(data){
   let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
   let len = getData.length;
   let str = `<h2 class="resultTitle">BMI紀錄</h2>`;
@@ -91,7 +98,7 @@ function render(e){
   <span class="reload position-absolute" style="background-color:#${getData[i].color}"><img style="" src="https://upload.cc/i1/2022/05/08/9FJVha.png" alt=""></span>
   <span class="position-absolute" style="bottom: -30px; left:20px ;color:#${getData[i].color}">${getData[i].result}</span>
   `;
-    str += `<li class="resultItem" style="border-left:7px solid #${getData[i].color}"><p>${getData[i].result}</p><p><span>BMI</span>${getData[i].bmi}</p><p><span>weight</span>${getData[i].kg}kg</p><p><span>height</span>${getData[i].height}cm</p><p>${getData[i].date}</p></li>`
+    str += `<li class="resultItem" style="border-left:7px solid #${getData[i].color}"><p>${getData[i].result}</p><p><span>BMI</span> ${getData[i].bmi}</p><p><span>weight</span> ${getData[i].kg}kg</p><p><span>height</span> ${getData[i].height}cm</p><p> ${getData[i].date}</p></li>`
   }
   resultList.innerHTML = str;
   result.innerHTML = btn;
@@ -120,12 +127,11 @@ function checkInputText(){
       waitKg.textContent = "";
     }
   })
-}
+};
 checkInputText();
 
-const reload = document.querySelector('.reload');
-function reset(){
 
+function reset(){
   result.addEventListener('click', function (e) {
     let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
 
@@ -136,5 +142,5 @@ function reset(){
       console.log('點到了reset 轉換為看結果按紐');
       result.innerHTML = btn;
     }
-  },true)
-}
+  }, false)
+};
