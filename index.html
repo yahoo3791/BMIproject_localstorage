@@ -60,6 +60,9 @@ table {
 .d-flex{
   display: flex;
 }
+.d-block{
+  display: block;
+}
 .align-center{
   align-items: center;
 }
@@ -82,7 +85,6 @@ table {
   border-radius: 10px;
   font-size: 24px;
   color: rgba(255,255,255,0.50);
-  margin-bottom: 23px;
   padding: 0 10px;
 }
 .news h2{
@@ -182,6 +184,24 @@ table {
   display: inline-block;
   padding: 5px 50px;
 }
+.main{
+  min-height: calc(100vh - 408px);
+}
+.pt-5{
+  padding-top: 10px;
+}
+.py-2{
+  padding: 3px 0;
+}
+.py-5{
+  padding: 20px 0 ;
+}
+.text-gray{
+  color: gray;
+}
+.text-center{
+  text-align: center;
+}
 /* 調整圈圈顏色樣式 */
 </style>
 <body>
@@ -192,9 +212,11 @@ table {
       </h1>
       <div class="news">
         <h2>身高cm</h2>
-        <input type="text" maxlength="3" class="newsInput newsHeight" placeholder="請輸入身高" style="height: 40px;">
-        <h2>體重kg</h2>
-        <input type="text" maxlength="3" class="newsInput newsKg" placeholder="請輸入體重" style="height: 40px;">
+        <input type="text" maxlength="3" class="newsInput newsHeight" style="height: 40px;">
+        <span class="d-block WaitCm py-2 text-gray"></span>
+        <h2 class="pt-5">體重kg</h2>
+        <input type="text" maxlength="3" class="newsInput newsKg" style="height: 40px;">
+        <span class="d-block WaitKg py-2 text-gray"></span>
       </div>
       <div class="position-relative result">
         <!-- <p class="" style="text-align: center; line-height: 120px;">看結果</p> -->
@@ -202,13 +224,17 @@ table {
         <!-- <span class="position-absolute" style="right:-50px; bottom: 50px;">123</span> -->
       </div>
     </div>
-    <ul class="resultList">
-      <h2 class="resultTitle">BMI紀錄</h2>
-      <!-- <li class="resultItem border-red"><p>理想</p><p><span>BMI</span>20.90</p><p><span>weight</span>70kg</p><p><span>height</span>180cm</p><p>date</p></li> -->
-    </ul>
-    <div class="clear" style="text-align: center;">
-      <button class="clearBtn">清除紀錄</button>
+    <div class="main">
+      <ul class="resultList">
+        <h2 class="resultTitle">BMI紀錄</h2>
+        <!-- <li class="resultItem border-red"><p>理想</p><p><span>BMI</span>20.90</p><p><span>weight</span>70kg</p><p><span>height</span>180cm</p><p>date</p></li> -->
+      </ul>
+      <p class="resultP text-center py-5"></p>
+      <div class="clear" style="text-align: center;">
+        <button class="clearBtn">清除紀錄</button>
+      </div>      
     </div>
+
     <div class="footer">
       <h1 class="footer_logo">
         <img style="width: 100%" src="https://recafox.github.io/bmi-calculator/images/BMICLogo.png" alt="">

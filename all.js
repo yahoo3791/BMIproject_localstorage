@@ -4,75 +4,85 @@ const result = document.querySelector('.result');
 const getData = JSON.parse(localStorage.getItem('list')) || [];
 const resultList = document.querySelector('.resultList');
 const clearBtn = document.querySelector('.clearBtn');
+const waitCm = document.querySelector('.WaitCm');
+const waitKg = document.querySelector('.WaitKg');
+const resultP = document.querySelector('.resultP');
 
 clearBtn.addEventListener('click', () => {
   localStorage.clear();
-  location.reload();
+  resultP.innerHTML = "這裡還沒有資料，快來計算你的 BMI 吧！";
+  newsHeight.value = '';
+  newsKg.value ='';
 })
 
+function init(){
 
+}
 
 
 result.addEventListener('click',function(){
-  let HeightValue = newsHeight.value;
-  let KgValue = newsKg.value;
-  if (HeightValue == '' || KgValue == '' || HeightValue == null || KgValue == null || HeightValue == undefined || KgValue == undefined ){
+  let heightValue = parseInt(newsHeight.value);
+  let kgValue = parseInt(newsKg.value);
+  // heightValue == '' || kgValue == '' || heightValue == null || kgValue == null || heightValue == undefined || kgValue == undefined 
+  if ( heightValue <= 0 || kgValue <= 0 ){
     alert('error');
     return;
   }
-  let bmi = calculate(KgValue, HeightValue).toFixed(2);
+  let bmi = calculate(kgValue, heightValue).toFixed(2);
   if(isNaN(bmi)){return};
-  let BmiResult;
+  let bmiResult;
   let date = new Date;
   let month = ('0' + (date.getMonth() + 1)).slice(-2);
   let day = date.getDate();
   let year = date.getFullYear();
   let today = month + '-' + day + '-' + year;
-  let BmiColor;
+  let bmiColor;
 
   if (bmi < 18.5) {
-    BmiResult = '過輕';
-    BmiColor = '31BAF9';
+    bmiResult = '過輕';
+    bmiColor = '31BAF9';
   } else if (bmi >= 18.5 && bmi < 24) {
-    BmiResult = '理想';
-    BmiColor = '86D73F';
+    bmiResult = '理想';
+    bmiColor = '86D73F';
   } else if (bmi >= 24 && bmi < 27) {
-    BmiResult = '過重';
-    BmiColor = 'FF982D';
+    bmiResult = '過重';
+    bmiColor = 'FF982D';
   } else if (bmi >= 27 && bmi < 30) {
-    BmiResult = '輕度肥胖';
-    BmiColor = 'FF6C03';
+    bmiResult = '輕度肥胖';
+    bmiColor = 'FF6C03';
   } else if (bmi >= 30 && bmi < 35) {
-    BmiResult = '中度肥胖';
-    BmiColor = 'FF6C03';
+    bmiResult = '中度肥胖';
+    bmiColor = 'FF6C03';
   } else if (bmi >= 35) {
-    BmiResult = '重度肥胖';
-    BmiColor = 'FF1200';
+    bmiResult = '重度肥胖';
+    bmiColor = 'FF1200';
   }
 
   let obj ={};
-  obj.result = `${BmiResult}`;
+  obj.result = `${bmiResult}`;
   obj.bmi = bmi;
-  obj.kg = KgValue;
-  obj.height = HeightValue;
+  obj.kg = kgValue;
+  obj.height = heightValue;
   obj.date = today;
-  obj.color = BmiColor;
+  obj.color = bmiColor;
   getData.push(obj);
   localStorage.setItem('list',JSON.stringify(getData));
 
-  HeightValue ='';
-  kgVaule ='';
+  newsHeight.value = '';
+  newsKg.value = '';
   render();
+  reset();
 });
 
 
 function calculate(a, b){
-  let Mathpow = Math.pow(b*0.01,2);
-  let bmi = a / Mathpow;
+  let mathpow = Math.pow(b*0.01,2);
+  let bmi = a / mathpow;
   return bmi;
 }
 
-function render(){
+
+function render(e){
   let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
   let len = getData.length;
   let str = `<h2 class="resultTitle">BMI紀錄</h2>`;
@@ -85,20 +95,46 @@ function render(){
   }
   resultList.innerHTML = str;
   result.innerHTML = btn;
-// 
-  const reload = document.querySelector('.reload');
-  if( reload == null ){
-    return;
-  }else{
-    reload.addEventListener('click', function (e) {
-      console.log(e.target);
-      if (e.target.nodeName == "SPAN" || e.target.nodeName == "IMG") {
-        result.innerHTML = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
-      } else {
-        return;
-      }
-    })
-// 
-  }
+
 }
 render();
+
+function checkInputText(){
+  newsHeight.addEventListener('focusin', (e) => {
+    if (e.target.value.length == 0) {
+      waitCm.textContent = "請輸入身高";
+    }
+  })
+  newsHeight.addEventListener('focusout', (e) => {
+    if (e.target.value.length > 0) {
+      waitCm.textContent = "";
+    }
+  })
+  newsKg.addEventListener('focusin', (e) => {
+    if (e.target.value.length == 0) {
+      waitKg.textContent = "請輸入體重";
+    }
+  })
+  newsKg.addEventListener('focusout', (e) => {
+    if (e.target.value.length > 0) {
+      waitKg.textContent = "";
+    }
+  })
+}
+checkInputText();
+
+const reload = document.querySelector('.reload');
+function reset(){
+
+  result.addEventListener('click', function (e) {
+    let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
+
+    if (e.target.nodeName == "P") {
+      console.log('點到bmi結果範圍');
+      return;
+    } else if (e.target.nodeName == "SPAN" || e.target.nodeName == "IMG") {
+      console.log('點到了reset 轉換為看結果按紐');
+      result.innerHTML = btn;
+    }
+  },true)
+}
