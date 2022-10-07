@@ -4,15 +4,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>BMI</title>
 </head>
 <style>
-  /* reset start */
-  /* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
+/* http://meyerweb.com/eric/tools/css/reset/ */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -56,12 +51,16 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-  /* reset end */
+/* RESET END */
+/* STYLE START */
 .d-flex{
   display: flex;
 }
 .d-block{
   display: block;
+}
+.d-none {
+  display: none;
 }
 .align-center{
   align-items: center;
@@ -78,17 +77,29 @@ table {
   height: 120px;
   background: #FFD366;
   border-radius: 50%;
+  text-align: center;
+}
+.result p {
+  font-size: 16px;
+  font-weight: 800;
+}
+.news {
+  margin: 0 40px;
 }
 .newsInput{
   background: rgba(255,255,255,0.18);
   border: 2px solid #FFD366;
   border-radius: 10px;
-  font-size: 24px;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
   color: rgba(255,255,255,0.50);
-  padding: 0 10px;
+  padding: 5px 10px;
+  width: 350px;
 }
 .news h2{
   font-size: 18px;
+  letter-spacing: 0.2em;
+  font-weight: bold;
   color: #FFD366;
   padding-bottom: 7px;
 }
@@ -104,7 +115,7 @@ table {
   text-align: center;
   position: relative;
   bottom: 0;
-  margin-top: 74px;
+  margin-top: 50px;
 }
 .footer_logo{
   background-color: gray;
@@ -118,7 +129,9 @@ table {
 .resultTitle{
   padding: 48px 0 36px 0;
   font-size: 24px;
-  color: #424242;
+  color: #FFD366;
+  font-weight: 800;
+  letter-spacing: 0.2em;
   text-align: center;
 }
 .resultList{
@@ -130,6 +143,7 @@ table {
   margin: 0 auto;
   background: #FFFFFF;
   margin-bottom: 16px;
+  color: #604949;
 }
 .wrap{
   background: rgba(149, 165, 166,0.9);
@@ -138,6 +152,35 @@ table {
   transition: all .3s;
   font-size: 20px;
   cursor: pointer;
+  letter-spacing: 0.2em;
+}
+@media (max-width:768px) {
+  .result {
+    margin-top: 30px;
+  }
+  .newsInput {
+    width: 270px;
+  }
+  .news h2 {
+    margin-top: 15px;
+  }
+}
+@media (max-width:425px) {
+  .news {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .newsInput {
+    width: 100%;
+    padding: 0;
+  }
+  .resultList li {
+    flex-direction: column;
+    text-align: center;
+  }
+  .resultItem {
+    padding: 5px 0;
+  }
 }
 .result:hover{  
   box-shadow: 0 1px 6px 3px rgba(255,196,50,0.64);
@@ -156,6 +199,7 @@ table {
 }
 .clearBtn{
   border: none;
+  color: #835f5f;
   background-color: #FFD366;
   padding: 10px;
   cursor: pointer;
@@ -189,7 +233,7 @@ table {
   padding: 5px;
 }
 .main{
-  min-height: calc(100vh - 408px);
+  min-height: calc(100vh - 360px);
 }
 .pt-5{
   padding-top: 10px;
@@ -216,11 +260,11 @@ table {
       </h1>
       <div class="news">
         <h2>身高cm</h2>
-        <input type="text" maxlength="3" class="newsInput newsHeight" style="height: 40px;">
-        <span class="d-block WaitCm py-2 text-gray"></span>
+        <input type="text" maxlength="3" class="newsInput newsHeight"
+        placeholder="請輸入身高" style="height: 40px;">
         <h2 class="pt-5">體重kg</h2>
-        <input type="text" maxlength="3" class="newsInput newsKg" style="height: 40px;">
-        <span class="d-block WaitKg py-2 text-gray"></span>
+        <input type="text" maxlength="3" class="newsInput newsKg"
+        placeholder="請輸入體重" style="height: 40px;">
       </div>
       <div class="position-relative result">
         <!-- <p class="" style="text-align: center; line-height: 120px;">看結果</p> -->
@@ -238,14 +282,12 @@ table {
         <button class="clearBtn">清除紀錄</button>
       </div>      
     </div>
-
     <div class="footer">
       <h1 class="footer_logo">
         <img style="width: 100%" src="https://recafox.github.io/bmi-calculator/images/BMICLogo.png" alt="">
       </h1>
     </div>
   </div>
-
   <script src="./all.js"></script>
 </body>
 </html>

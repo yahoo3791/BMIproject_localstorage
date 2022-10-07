@@ -4,31 +4,29 @@ const result = document.querySelector('.result');
 let getData = JSON.parse(localStorage.getItem('list')) || [];
 const resultList = document.querySelector('.resultList');
 const clearBtn = document.querySelector('.clearBtn');
-const waitCm = document.querySelector('.WaitCm');
-const waitKg = document.querySelector('.WaitKg');
 const resultP = document.querySelector('.resultP');
 
 clearBtn.addEventListener('click', () => {
-  // localStorage.clear();
   localStorage.removeItem('list');
   init();
 })
 function init(){
   resultList.innerHTML = `
   <h2 class="resultTitle">BMI紀錄</h2>
-  <li>這裡還沒有資料，快來計算你的 BMI 吧！</li>`;
+  <li style="color:white;font-size:1rem">這裡還沒有資料，快來計算你的 BMI 吧！</li>`;
   newsHeight.value = '';
   newsKg.value = '';
-  let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
+  let btn = `<p class="" style="text-align: center; line-height: 120px;color:#7a8f69">看結果</p>`;
   result.innerHTML = btn;
   if (JSON.parse(localStorage.getItem('list')) == null ){
     localStorage.setItem('list', JSON.stringify([]));
     let arr1 = [];
     getData = arr1;
     // 設定回空陣列 localStorage清空但陣列沒空 導致重新輸入新值會有清空值出現
-    console.log(getData);
   }
+  clearBtn.classList.add('d-none');
 }
+
 result.addEventListener('click',function(){
   let heightValue = parseInt(newsHeight.value);
   let kgValue = parseInt(newsKg.value);
@@ -90,56 +88,36 @@ function calculate(a, b){
 
 
 function render(data){
-  let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
+  let btn = `<p class="" style="text-align: center; line-height: 120px;color:#7a8f69">看結果</p>`;
   let len = getData.length;
   let str = `<h2 class="resultTitle">BMI紀錄</h2>`;
   for(let i=0; i<len; i++){
-    btn = `<p style="border-radius:50%; text-align: center; line-height: 110px; border:5px solid #${getData[i].color}; color:#${getData[i].color}">BMI${getData[i].bmi}</p>
+    btn = `<p style="margin-bottom:10px; border-radius:50%; text-align: center; line-height: 110px; border:5px solid #${getData[i].color}; color:#${getData[i].color}">BMI${getData[i].bmi}</p>
   <span class="reload position-absolute" style="background-color:#${getData[i].color}"><img style="" src="https://upload.cc/i1/2022/05/08/9FJVha.png" alt=""></span>
-  <span class="position-absolute" style="bottom: -30px; left:20px ;color:#${getData[i].color}">${getData[i].result}</span>
+  <span style="color:#${getData[i].color}">${getData[i].result}</span>
   `;
     str += `<li class="resultItem" style="border-left:7px solid #${getData[i].color}"><p>${getData[i].result}</p><p><span>BMI</span> ${getData[i].bmi}</p><p><span>weight</span> ${getData[i].kg}kg</p><p><span>height</span> ${getData[i].height}cm</p><p> ${getData[i].date}</p></li>`
   }
   resultList.innerHTML = str;
   result.innerHTML = btn;
-
+  if ( len <=0 ) {
+    resultList.innerHTML = `
+    <h2 class="resultTitle">BMI紀錄</h2>
+    <li style="color:white;font-size:1rem">這裡還沒有資料，快來計算你的 BMI 吧！</li>`;
+    clearBtn.classList.add('d-none');
+  } else {
+    clearBtn.classList.remove('d-none');
+  }
 }
 render();
-
-function checkInputText(){
-  newsHeight.addEventListener('focusin', (e) => {
-    if (e.target.value.length == 0) {
-      waitCm.textContent = "請輸入身高";
-    }
-  })
-  newsHeight.addEventListener('focusout', (e) => {
-    if (e.target.value.length > 0) {
-      waitCm.textContent = "";
-    }
-  })
-  newsKg.addEventListener('focusin', (e) => {
-    if (e.target.value.length == 0) {
-      waitKg.textContent = "請輸入體重";
-    }
-  })
-  newsKg.addEventListener('focusout', (e) => {
-    if (e.target.value.length > 0) {
-      waitKg.textContent = "";
-    }
-  })
-};
-checkInputText();
 
 
 function reset(){
   result.addEventListener('click', function (e) {
-    let btn = `<p class="" style="text-align: center; line-height: 120px;">看結果</p>`;
-
+    let btn = `<p class="" style="text-align: center; line-height: 120px;color:#7a8f69">看結果</p>`;
     if (e.target.nodeName == "P") {
-      console.log('點到bmi結果範圍');
       return;
     } else if (e.target.nodeName == "SPAN" || e.target.nodeName == "IMG") {
-      console.log('點到了reset 轉換為看結果按紐');
       result.innerHTML = btn;
     }
   }, false)
